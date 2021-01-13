@@ -1,0 +1,172 @@
+[
+  {
+    "id": "5ff6e77459cdf47f74da18fb",
+    "name": "Amar-PLANE",
+    "position": {
+      "latitude": 39.01985,
+      "longitude": 31.31189,
+      "altitude": 1616
+    },
+    "family": "AIR_FORCE"
+  },
+  {
+    "id": "5ff6e774ed16391050c9ad5f",
+    "name": "Rebi-PLANE",
+    "position": {
+      "latitude": 32.92887,
+      "longitude": 30.79627,
+      "altitude": 1225
+    },
+    "family": "AIR_FORCE"
+  },
+  {
+    "id": "5ff6e774e849f0f5b4cf581a",
+    "name": "Itzhak-PLANE",
+    "position": {
+      "latitude": 37.35327,
+      "longitude": 38.06679,
+      "altitude": 1820
+    },
+    "family": "AIR_FORCE"
+  },
+  {
+    "id": "5ff6e774265d3bbb1d013340",
+    "name": "Ein-PLANE",
+    "position": {
+      "latitude": 30.52460,
+      "longitude": 33.93283,
+      "altitude": 1279
+    },
+    "family": "AIR_FORCE"
+  },
+  {
+    "id": "5ff6e7742bce1ccd3fb5836c",
+    "name": "HaBrakha-PLANE",
+    "position": {
+      "latitude": 34.34458,
+      "longitude": 38.98491,
+      "altitude": 1277
+    },
+    "family": "AIR_FORCE"
+  },
+  {
+    "id": "5ff6e774b355c9dc0ab4e54c",
+    "name": "Metsouya-PLANE",
+    "position": {
+      "latitude": 33.46960,
+      "longitude": 31.49810,
+      "altitude": 1477
+    },
+    "family": "AIR_FORCE"
+  },
+  {
+    "id": "5ff6e774c6e8ac7a63b4eb9a",
+    "name": "Ela-PLANE",
+    "position": {
+      "latitude": 28.53634,
+      "longitude": 37.55509,
+      "altitude": 1935
+    },
+    "family": "LAND_FORCE"
+  },
+  {
+    "id": "5ff6e774ee1484683bd5e91d",
+    "name": "Bedavar-PLANE",
+    "position": {
+      "latitude": 30.16795,
+      "longitude": 36.57892,
+      "altitude": 1024
+    },
+    "family": "LAND_FORCE"
+  },
+  {
+    "id": "5ff6e7749a38833c594da5b8",
+    "name": "Hasamouy-PLANE",
+    "position": {
+      "latitude": 35.65671,
+      "longitude": 39.39427,
+      "altitude": 1340
+    },
+    "family": "LAND_FORCE"
+  },
+  {
+    "id": "5ff6e7981935b42bfe8778a9",
+    "name": "Mine-PLANE",
+    "position": {
+      "latitude": 30.08770,
+      "longitude": 38.65526,
+      "altitude": 1860
+    },
+    "family": "LAND_FORCE"
+  },
+  {
+    "id": "5ff6e79839c333ccd826de25",
+    "name": "HaAyin-PLANE",
+    "position": {
+      "latitude": 35.62029,
+      "longitude": 30.79686,
+      "altitude": 1153
+    },
+    "family": "LAND_FORCE"
+  },
+  {
+    "id": "5ff6e7989713038a07bc3687",
+    "name": "Yetsav-PLANE",
+    "position": {
+      "latitude": 30.62844,
+      "longitude": 37.46319,
+      "altitude": 1453
+    },
+    "family": "CIVILIAN"
+  },
+  {
+    "id": "5ff6e7983461ae9524393e99",
+    "name": "Hachem-PLANE",
+    "position": {
+      "latitude": 39.26657,
+      "longitude": 34.59999,
+      "altitude": 1084
+    },
+    "family": "CIVILIAN"
+  },
+  {
+    "id": "5ff6e798cdecb555d562014f",
+    "name": "Oteha-PLANE",
+    "position": {
+      "latitude": 32.33622,
+      "longitude": 34.74018,
+      "altitude": 1115
+    },
+    "family": "CIVILIAN"
+  },
+  {
+    "id": "5ff6e7984432761cc2b98259",
+    "name": "Et-PLANE",
+    "position": {
+      "latitude": 38.58585,
+      "longitude": 36.29375,
+      "altitude": 1727
+    },
+    "family": "CIVILIAN"
+  },
+  {
+    "id": "5ff6e79864afa1888d5064cb",
+    "name": "HaBeraha-PLANE",
+    "position": {
+      "latitude": 35.19412,
+      "longitude": 34.53697,
+      "altitude": 1503
+    },
+    "family": "CIVILIAN"
+  },
+  {
+    "id": "5ff6e7987440cb680084499b",
+    "name": "BaAsameha-PLANE",
+    "position": {
+      "latitude": 39.25095,
+      "longitude": 32.24825,
+      "altitude": 1875
+    },
+    "family": "CIVILIAN"
+  }
+]

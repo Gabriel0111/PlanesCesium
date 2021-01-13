@@ -1,0 +1,8 @@
+<div class="container">
+  <div class="row">
+    <ul class="list-group">
+      <li class="list-group-item list-group-item-info" *ngFor="let plane of planesList | async" [textContent]="plane.name">
+      </li>
+    </ul>
+  </div>
+</div>
