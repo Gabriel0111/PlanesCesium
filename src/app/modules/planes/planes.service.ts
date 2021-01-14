@@ -6,7 +6,7 @@ import {AddPlanes, SelectedPlane, UnselectedPlane} from '../../store/planes.acti
 import {AppState} from '../../store/appState';
 import * as Cesium from 'cesium';
 import {ConstantProperty, Entity, EntityCollection, SkyAtmosphere} from 'cesium';
-import {skipWhile} from 'rxjs/operators';
+import {skipWhile, take} from 'rxjs/operators';
 import {AIR_FORCE_COLOR, CIVILIAN_COLOR, LAND_FORCE_COLOR} from '../core/constants';
 import {Observable, Subject} from 'rxjs';
 import {GenerateEntityService} from '../core/generate-entity.service';
@@ -15,9 +15,12 @@ import {GenerateEntityService} from '../core/generate-entity.service';
 export class PlanesService {
   private viewer: Cesium.Viewer;
   private selectedPlane: Subject<Entity>;
+  private postRenderSubject: Subject<void>;
 
   constructor(private http: HttpClient, private store: Store<AppState>) {
     this.selectedPlane = new Subject<Entity>();
+    this.postRenderSubject = new Subject<void>();
+
     this.initPlanes();
   }
 
@@ -31,14 +34,18 @@ export class PlanesService {
   }
 
   private initSubscription(): void {
+    this.viewer.scene.postRender.addEventListener(() => this.postRenderSubject.next());
+
     this.viewer.selectedEntityChanged.addEventListener(plane => {
-      if (plane) {
-        this.store.dispatch(new SelectedPlane(plane.id));
-        this.selectedPlane.next(plane);
-      } else {
-        this.store.dispatch(new UnselectedPlane());
-        this.selectedPlane.next(null);
-      }
+      this.postRenderSubject.pipe(take(1)).subscribe(() => {
+        if (plane) {
+          this.selectedPlane.next(plane);
+          this.store.dispatch(new SelectedPlane(plane.id));
+        } else {
+          this.selectedPlane.next(null);
+          this.store.dispatch(new UnselectedPlane());
+        }
+      });
     });
   }
 
@@ -83,11 +90,11 @@ export class PlanesService {
     this.initSubscription();
   }
 
-  async drawEntities(entities: EntityCollection | Entity): Promise<void> {
+  drawEntities(entities: EntityCollection | Entity): void {
     if (this.viewer) {
       if (entities instanceof EntityCollection) {
         for (const entity of entities.values) {
-         this.viewer.entities.add(entity);
+          this.viewer.entities.add(entity);
         }
       } else if (entities instanceof Entity) {
         this.viewer.entities.add(entities);
@@ -95,7 +102,7 @@ export class PlanesService {
     }
   }
 
-  async removeEntities(ids: string | string[]): Promise<void> {
+  removeEntities(ids: string | string[]): void {
     if (this.viewer) {
       if (typeof ids === 'string') {
         this.viewer.entities.removeById(ids);
