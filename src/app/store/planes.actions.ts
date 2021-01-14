@@ -23,13 +23,12 @@ export class UpdatePlanes implements Action {
 export class SelectedPlane implements Action {
   readonly type: string = SELECTED_PLANE;
 
-  constructor(public payload: Plane) {
+  constructor(public payload: string) {
   }
 }
 
 export class UnselectedPlane implements Action {
   readonly type: string = UNSELECTED_PLANE;
 }
-
 
 export type PlanesActions = AddPlanes | UpdatePlanes |  UnselectedPlane ;

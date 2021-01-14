@@ -2,13 +2,14 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Plane, PlaneFamily} from './plane.model';
 import {Store} from '@ngrx/store';
-import {AddPlanes} from '../../store/planes.actions';
+import {AddPlanes, SelectedPlane, UnselectedPlane} from '../../store/planes.actions';
 import {AppState} from '../../store/appState';
 import * as Cesium from 'cesium';
-import {Entity, EntityCollection, SkyAtmosphere} from 'cesium';
+import {ConstantProperty, Entity, EntityCollection, SkyAtmosphere} from 'cesium';
 import {skipWhile} from 'rxjs/operators';
+import {AIR_FORCE_COLOR, CIVILIAN_COLOR, LAND_FORCE_COLOR} from '../core/constants';
 import {Observable, Subject} from 'rxjs';
-import * as haversineDistance from 'haversine-distance';
+import {GenerateEntityService} from '../core/generate-entity.service';
 
 @Injectable()
 export class PlanesService {
@@ -20,7 +21,7 @@ export class PlanesService {
     this.initPlanes();
   }
 
-  private initPlanes(): void {
+  private async initPlanes(): Promise<void> {
     this.http.get<Plane[]>('http://localhost:4200/assets/data.json')
       .pipe(skipWhile(data => data.length < 1))
       .subscribe(planes => {
@@ -29,29 +30,37 @@ export class PlanesService {
       });
   }
 
+  private initSubscription(): void {
+    this.viewer.selectedEntityChanged.addEventListener(plane => {
+      if (plane) {
+        this.store.dispatch(new SelectedPlane(plane.id));
+        this.selectedPlane.next(plane);
+      } else {
+        this.store.dispatch(new UnselectedPlane());
+        this.selectedPlane.next(null);
+      }
+    });
+  }
+
   private fillDisplayPlaneProperties(planes: Plane[]): any {
     planes.forEach(plane => {
       plane.imgURL = '/assets/' + plane.family.toString().toLowerCase() + '.png';
 
       switch (plane.family) {
         case PlaneFamily.LAND_FORCE:
-          plane.color = Cesium.Color.fromCssColorString('#ff8321');
+          plane.color = Cesium.Color.fromCssColorString(LAND_FORCE_COLOR);
           break;
         case PlaneFamily.AIR_FORCE:
-          plane.color = Cesium.Color.fromCssColorString('#f23a32');
+          plane.color = Cesium.Color.fromCssColorString(AIR_FORCE_COLOR);
           break;
         case PlaneFamily.CIVILIAN:
-          plane.color = Cesium.Color.fromCssColorString('#effd3b');
+          plane.color = Cesium.Color.fromCssColorString(CIVILIAN_COLOR);
           break;
       }
     });
   }
 
-  public onSelectedPlane(): Observable<Entity> {
-    return this.selectedPlane.asObservable();
-  }
-
-  public initMap(el: HTMLElement): void {
+  async initMap(el: HTMLElement): Promise<void> {
     this.viewer = new Cesium.Viewer(el, {
       // terrainProvider: Cesium.createWorldTerrain(),
       imageryProvider: Cesium.createWorldImagery({
@@ -70,18 +79,34 @@ export class PlanesService {
     this.viewer.camera.flyTo({
       destination: Cesium.Cartesian3.fromDegrees(35.238892, 31.770552, 4000000)
     });
+
+    this.initSubscription();
   }
 
-  public drawPlanes(entities: EntityCollection): void {
+  async drawEntities(entities: EntityCollection | Entity): Promise<void> {
     if (this.viewer) {
-      for (const entity of entities.values) {
-        this.viewer.entities.add(entity);
+      if (entities instanceof EntityCollection) {
+        for (const entity of entities.values) {
+         this.viewer.entities.add(entity);
+        }
+      } else if (entities instanceof Entity) {
+        this.viewer.entities.add(entities);
       }
-
-      this.viewer.selectedEntityChanged.addEventListener(plane => {
-        this.selectedPlane.next(plane);
-      });
     }
+  }
+
+  async removeEntities(ids: string | string[]): Promise<void> {
+    if (this.viewer) {
+      if (typeof ids === 'string') {
+        this.viewer.entities.removeById(ids);
+      } else if (typeof ids === 'object') {
+        ids.forEach(id => this.viewer.entities.removeById(id));
+      }
+    }
+  }
+
+  getSelectedPlane(): Observable<Entity> {
+    return this.selectedPlane.asObservable();
   }
 
 }

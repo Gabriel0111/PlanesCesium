@@ -1,5 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {PlanesService} from './planes.service';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../store/appState';
 import {map} from 'rxjs/operators';
@@ -8,8 +7,7 @@ import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-planes',
-  templateUrl: './planes.component.html',
-  styleUrls: ['./planes.component.css']
+  templateUrl: './planes.component.html'
 })
 export class PlanesComponent implements OnInit {
   planesList: Observable<Plane[]>;
