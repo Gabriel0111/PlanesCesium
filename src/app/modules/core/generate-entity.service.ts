@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Plane} from '../planes/plane.model';
-import {ConstantProperty, EntityCollection} from 'cesium';
+import {CompositeEntityCollection, ConstantProperty, Entity, EntityCollection} from 'cesium';
 import * as Cesium from 'cesium';
 
 @Injectable({
@@ -16,8 +16,8 @@ export class GenerateEntityService {
 
     planes.sort((p1, p2) => p1.distanceFromSelectedPlane - p2.distanceFromSelectedPlane)
       .forEach(plane => plane.distanceFromSelectedPlane
-        ? description += `<li><span style="color: ${plane.color.toCssColorString()}">${plane.name}</span> :
-                          <b>${plane.distanceFromSelectedPlane} m</b></li>`
+        ? description += `<li><span style="color: ${plane.color.toCssColorString()}">${plane.name}</span>: ` +
+          `<b>${plane.distanceFromSelectedPlane} m</b></li>`
         : 1 + 1);
 
     description += '</ul>';
@@ -29,7 +29,8 @@ export class GenerateEntityService {
     const entities = new EntityCollection();
 
     for (const plane of planes) {
-      entities.add({
+
+      const planeEntity = new Entity({
         id: plane.id,
         name: plane.name,
         position: Cesium.Cartesian3.fromDegrees(plane.position.latitude, plane.position.longitude, plane.position.altitude),
@@ -49,18 +50,23 @@ export class GenerateEntityService {
         }
       });
 
-      entities.add({
-        id: plane.id + '-shadow',
-        position: Cesium.Cartesian3.fromDegrees(plane.position.latitude, plane.position.longitude, plane.position.altitude),
-        ellipse : {
-          semiMinorAxis : 75000,
-          semiMajorAxis : 75000,
-          material : plane.color.withAlpha(0.38)
-        }
-      });
+      entities.add(planeEntity);
     }
 
     return entities;
+  }
+
+  generateShadow(plane: Plane): Entity {
+    return new Entity({
+      id: 'shadowSelectedPlane',
+      position: Cesium.Cartesian3.fromDegrees(plane.position.latitude, plane.position.longitude, plane.position.altitude),
+      ellipse: {
+        semiMinorAxis: 750000,
+        semiMajorAxis: 750000,
+        material: Cesium.Color.RED,
+        // material: plane.color.withAlpha(0.38)
+      }
+    });
   }
 
 }
