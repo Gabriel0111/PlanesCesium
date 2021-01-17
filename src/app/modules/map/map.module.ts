@@ -1,9 +1,9 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {MapComponent} from './map.component';
-import {MapDirective} from './map.directive';
 import {RouteReuseStrategy} from '@angular/router';
 import {CustomRouteReuseStrategy} from '../core/custom-route-reuse-strategy';
+import {MapComponent} from './components/map.component';
+import {MapDirective} from './directives/map.directive';
 
 
 @NgModule({

@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
-import {RouteReuseStrategy, RouterModule} from '@angular/router';
+import {RouterModule} from '@angular/router';
 import {AppRoutingModule} from './app-routing.module';
 import {StoreModule} from '@ngrx/store';
 import {planesReducers} from './store/planes.reducers';

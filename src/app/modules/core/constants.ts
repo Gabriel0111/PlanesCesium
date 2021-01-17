@@ -9,4 +9,4 @@ export const ID_SELECTED_SHADOW = 'shadowSelectedPlane';
 
 export const LAND_FORCE_COLOR = '#7aca04';
 export const AIR_FORCE_COLOR = '#3efcd6';
-export const CIVILIAN_COLOR = '#9bc8af';
+export const CIVILIAN_COLOR = '#4464c8';

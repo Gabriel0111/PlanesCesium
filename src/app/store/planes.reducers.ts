@@ -5,7 +5,7 @@ import {
   SELECTED_PLANE,
   SelectedPlane, UNSELECTED_PLANE,
 } from './planes.actions';
-import {Plane} from '../modules/planes/plane.model';
+import {Plane} from '../modules/core/plane.model';
 import * as haversineDistance from 'haversine-distance';
 
 export interface PlaneState {

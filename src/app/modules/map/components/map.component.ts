@@ -1,22 +1,20 @@
 import * as Cesium from 'cesium';
-import {Component, OnInit} from '@angular/core';
-import {PlanesService} from '../planes/planes.service';
+import {AfterViewChecked, Component, OnChanges, OnDestroy, OnInit} from '@angular/core';
 import {map, skipWhile, take} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
-import {AppState} from '../../store/appState';
-import {Entity} from 'cesium';
-import {GenerateEntityService} from '../core/generate-entity.service';
-import {DesignEntitiesService} from './design-entities.service';
-import {Plane} from '../planes/plane.model';
-import {PlaneState} from '../../store/planes.reducers';
-
+import {PlanesService} from '../../planes/services/planes.service';
+import {AppState} from '../../../store/appState';
+import {GenerateEntityService} from '../../core/generate-entity.service';
+import {DesignEntitiesService} from '../services/design-entities.service';
+import {PlaneState} from '../../../store/planes.reducers';
+import {Plane} from '../../core/plane.model';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnInit {
+export class MapComponent implements OnDestroy, OnInit {
   planeEntities = new Cesium.EntityCollection();
 
   constructor(private planesService: PlanesService, private store: Store<AppState>,
@@ -24,12 +22,19 @@ export class MapComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.initEntities();
+    this.planesService.cesiumViewerInit$.pipe(take(1)).subscribe(() => {
+      this.initEntities();
+    });
+
     this.planesService.getSelectedPlane().pipe(take(1))
       .subscribe(() => this.changeEntities());
   }
 
-  private async initEntities(): Promise<void> {
+  ngOnDestroy(): void {
+    this.planesService.removeAll();
+  }
+
+  private initEntities(): void {
     this.store.select('planes').pipe(
       skipWhile(data => data.planes.length < 1),
       take(1),
@@ -40,7 +45,7 @@ export class MapComponent implements OnInit {
       });
   }
 
-  private async changeEntities(): Promise<void> {
+  private changeEntities(): void {
     this.store
       .select('planes')
       .pipe(skipWhile(data => data.planes.length < 1))

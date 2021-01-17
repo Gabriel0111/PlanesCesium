@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PlanesComponent } from './planes.component';
-import {PlanesService} from './planes.service';
+import {PlanesComponent} from './components/planes.component';
+import {PlanesService} from './services/planes.service';
 
 @NgModule({
   declarations: [PlanesComponent],

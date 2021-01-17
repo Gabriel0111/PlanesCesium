@@ -1,5 +1,5 @@
-import {Component, OnInit} from '@angular/core';
-import {PlanesService} from './modules/planes/planes.service';
+import {Component} from '@angular/core';
+import {PlanesService} from './modules/planes/services/planes.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +7,6 @@ import {PlanesService} from './modules/planes/planes.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent{
+  constructor(private planesService: PlanesService) {
+  }
 }

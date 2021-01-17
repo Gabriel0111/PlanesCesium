@@ -1,10 +1,10 @@
 import * as Cesium from 'cesium';
 import {Injectable} from '@angular/core';
 import {ConstantProperty, Entity, EntityCollection} from 'cesium';
-import {Plane} from '../planes/plane.model';
-import {GenerateEntityService} from '../core/generate-entity.service';
-import {PlanesService} from '../planes/planes.service';
-import {ID_SELECTED_SHADOW} from '../core/constants';
+import {GenerateEntityService} from '../../core/generate-entity.service';
+import {PlanesService} from '../../planes/services/planes.service';
+import {Plane} from '../../core/plane.model';
+import {ID_SELECTED_SHADOW} from '../../core/constants';
 
 @Injectable({
   providedIn: 'root'

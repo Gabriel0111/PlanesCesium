@@ -1,5 +1,5 @@
 import {Action} from '@ngrx/store';
-import {Plane} from '../modules/planes/plane.model';
+import {Plane} from '../modules/core/plane.model';
 
 export const ADD_PLANES = 'ADD_PLANES';
 export const UPDATE_PLANES = 'UPDATE_PLANES';

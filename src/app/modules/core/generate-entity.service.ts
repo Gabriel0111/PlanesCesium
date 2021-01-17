@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
-import {Plane} from '../planes/plane.model';
 import {ConstantProperty, Entity, EntityCollection} from 'cesium';
 import * as Cesium from 'cesium';
 import {FAR, FAR_VALUE, ID_SELECTED_SHADOW, NEAR, NEAR_VALUE} from './constants';
+import {Plane} from './plane.model';
 
 @Injectable({
   providedIn: 'root'
