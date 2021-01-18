@@ -8,14 +8,11 @@ import {Plane} from './plane.model';
   providedIn: 'root'
 })
 export class GenerateEntityService {
-  constructor() {
-  }
-
   generateEntitiesFromPlanes(planes: Plane[]): EntityCollection {
-    const entities = new EntityCollection();
+    const entities: EntityCollection = new EntityCollection();
 
     for (const plane of planes) {
-      const planeEntity = new Entity({
+      const planeEntity: Entity = new Entity({
         id: plane.id,
         name: plane.name,
         position: Cesium.Cartesian3.fromDegrees(plane.position.latitude, plane.position.longitude, plane.position.altitude),
@@ -52,9 +49,9 @@ export class GenerateEntityService {
   }
 
   generateDescription(planes: Plane[]): ConstantProperty {
-    let description = `<h3>Distance From Other Planes</h3><hr><ul>`;
+    let description: string = `<h3>Distance From Other Planes</h3><hr><ul>`;
 
-    planes.sort((p1, p2) => p1.distanceFromSelectedPlane - p2.distanceFromSelectedPlane)
+    planes.sort((p1: Plane, p2: Plane) => p1.distanceFromSelectedPlane - p2.distanceFromSelectedPlane)
       .forEach(plane => plane.distanceFromSelectedPlane
         ? description += `<li><span style="color: ${plane.color.toCssColorString()}">${plane.name}</span>: ` +
           `<b>${plane.distanceFromSelectedPlane} km</b></li>`
@@ -64,8 +61,8 @@ export class GenerateEntityService {
   }
 
   generateLine(fromPlane: Plane, toPlane: Plane): Entity {
-    const fromPosition = [fromPlane.position.latitude, fromPlane.position.longitude];
-    const toPosition = [toPlane.position.latitude, toPlane.position.longitude];
+    const fromPosition: number[] = [fromPlane.position.latitude, fromPlane.position.longitude];
+    const toPosition: number[] = [toPlane.position.latitude, toPlane.position.longitude];
 
     return new Entity({
       polyline: {

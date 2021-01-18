@@ -8,5 +8,6 @@ import {PlanesService} from './modules/planes/services/planes.service';
 })
 export class AppComponent{
   constructor(private planesService: PlanesService) {
+    planesService.initPlanes();
   }
 }

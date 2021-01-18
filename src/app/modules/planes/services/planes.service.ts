@@ -8,7 +8,8 @@ import {Observable, Subject} from 'rxjs';
 import {AppState} from '../../../store/appState';
 import {Plane, PlaneFamily} from '../../core/plane.model';
 import {AddPlanes, SelectedPlane, UnselectedPlane} from '../../../store/planes.actions';
-import {AIR_FORCE_COLOR, CIVILIAN_COLOR, LAND_FORCE_COLOR} from '../../core/constants';
+import {AIR_FORCE_COLOR, CIVILIAN_COLOR, LAND_FORCE_COLOR} from '../../core/colors.constants';
+import {DEST_ALT, DEST_LAT, DEST_LNG} from '../../core/constants';
 
 @Injectable()
 export class PlanesService {
@@ -21,12 +22,11 @@ export class PlanesService {
     this.selectedPlane = new Subject<Entity>();
     this.postRenderSubject = new Subject<void>();
     this.cesiumViewerInit$ = new Subject<void>();
-    this.initPlanes();
   }
 
-  private async initPlanes(): Promise<void> {
+  async initPlanes(): Promise<void> {
     this.http.get<Plane[]>('http://localhost:4200/assets/data.json')
-      .pipe(skipWhile(data => data.length < 1), take(1))
+      .pipe(skipWhile((data: Plane[]) => data.length < 1), take(1))
       .subscribe(planes => {
         this.fillDisplayPlaneProperties(planes);
         this.store.dispatch(new AddPlanes(planes));
@@ -36,15 +36,10 @@ export class PlanesService {
   private initSubscription(): void {
     this.viewer.scene.postRender.addEventListener(() => this.postRenderSubject.next());
 
-    this.viewer.selectedEntityChanged.addEventListener(plane => {
+    this.viewer.selectedEntityChanged.addEventListener((plane: Entity) => {
       this.postRenderSubject.pipe(take(1)).subscribe(() => {
-        if (plane) {
-          this.selectedPlane.next(plane);
-          this.store.dispatch(new SelectedPlane(plane.id));
-        } else {
-          this.selectedPlane.next(null);
-          this.store.dispatch(new UnselectedPlane());
-        }
+          this.selectedPlane.next(plane ?? null);
+          this.store.dispatch(plane ? new SelectedPlane(plane.id) : new UnselectedPlane());
       });
     });
   }
@@ -52,23 +47,25 @@ export class PlanesService {
   private fillDisplayPlaneProperties(planes: Plane[]): any {
     planes.forEach(plane => {
       plane.imgURL = '/assets/' + plane.family.toString().toLowerCase() + '.png';
-
-      switch (plane.family) {
-        case PlaneFamily.LAND_FORCE:
-          plane.color = Cesium.Color.fromCssColorString(LAND_FORCE_COLOR);
-          break;
-        case PlaneFamily.AIR_FORCE:
-          plane.color = Cesium.Color.fromCssColorString(AIR_FORCE_COLOR);
-          break;
-        case PlaneFamily.CIVILIAN:
-          plane.color = Cesium.Color.fromCssColorString(CIVILIAN_COLOR);
-          break;
-      }
+      this.colorPlane(plane);
     });
   }
 
+  private colorPlane(plane: Plane): void {
+    switch (plane.family) {
+      case PlaneFamily.LAND_FORCE:
+        plane.color = Cesium.Color.fromCssColorString(LAND_FORCE_COLOR);
+        break;
+      case PlaneFamily.AIR_FORCE:
+        plane.color = Cesium.Color.fromCssColorString(AIR_FORCE_COLOR);
+        break;
+      case PlaneFamily.CIVILIAN:
+        plane.color = Cesium.Color.fromCssColorString(CIVILIAN_COLOR);
+        break;
+    }
+  }
+
   initMap(el: HTMLElement): void {
-    console.log('initMap');
     this.viewer = new Cesium.Viewer(el, {
       imageryProvider: Cesium.createWorldImagery({
         style: Cesium.IonWorldImageryStyle.AERIAL,
@@ -84,7 +81,7 @@ export class PlanesService {
       navigationInstructionsInitiallyVisible: false
     });
     this.viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(35.238892, 31.770552, 4000000)
+      destination: Cesium.Cartesian3.fromDegrees(DEST_LNG, DEST_LAT, DEST_ALT)
     });
 
     this.initSubscription();
@@ -92,7 +89,6 @@ export class PlanesService {
   }
 
   drawEntities(entities: EntityCollection | Entity): void {
-    console.log('drawEntities');
     if (this.viewer) {
       if (entities instanceof EntityCollection) {
         for (const entity of entities.values) {
@@ -116,10 +112,6 @@ export class PlanesService {
 
   getSelectedPlane(): Observable<Entity> {
     return this.selectedPlane.asObservable();
-  }
-
-  removeAll(): void {
-    this.viewer.entities.removeAll();
   }
 
 }

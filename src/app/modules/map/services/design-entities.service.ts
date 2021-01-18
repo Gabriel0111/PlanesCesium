@@ -34,7 +34,7 @@ export class DesignEntitiesService {
   }
 
   addShadow(entity: Plane): void {
-    const shadowEntity = this.generateEntityService.generateShadow(entity);
+    const shadowEntity: Entity = this.generateEntityService.generateShadow(entity);
     this.planesService.drawEntities(shadowEntity);
   }
 

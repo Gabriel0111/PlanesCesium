@@ -8,14 +8,15 @@ import {GenerateEntityService} from '../../core/generate-entity.service';
 import {DesignEntitiesService} from '../services/design-entities.service';
 import {PlaneState} from '../../../store/planes.reducers';
 import {Plane} from '../../core/plane.model';
+import {EntityCollection} from 'cesium';
 
 @Component({
   selector: 'app-map',
   templateUrl: './map.component.html',
   styleUrls: ['./map.component.css']
 })
-export class MapComponent implements OnDestroy, OnInit {
-  planeEntities = new Cesium.EntityCollection();
+export class MapComponent implements OnInit {
+  planeEntities: EntityCollection = new EntityCollection();
 
   constructor(private planesService: PlanesService, private store: Store<AppState>,
               private generateEntityService: GenerateEntityService, private designEntitiesService: DesignEntitiesService) {
@@ -28,10 +29,6 @@ export class MapComponent implements OnDestroy, OnInit {
 
     this.planesService.getSelectedPlane().pipe(take(1))
       .subscribe(() => this.changeEntities());
-  }
-
-  ngOnDestroy(): void {
-    this.planesService.removeAll();
   }
 
   private initEntities(): void {
@@ -48,26 +45,20 @@ export class MapComponent implements OnDestroy, OnInit {
   private changeEntities(): void {
     this.store
       .select('planes')
-      .pipe(skipWhile(data => data.planes.length < 1))
-      .subscribe(data => {
+      .pipe(skipWhile((data: PlaneState) => data.planes.length < 1))
+      .subscribe((data: PlaneState) => {
 
-        if (data.selected) {
+        if (data.selected)
           this.clearPlanes(data);
-        }
 
-        if (data.selectedPlane) {
-          this.drawPlanes(data);
-        } else {
-          this.clearPlanes(data);
-        }
-
+        (data.selectedPlane) ? this.drawPlanes(data) : this.clearPlanes(data);
       });
   }
 
   private drawPlanes(data: PlaneState): void {
     // Decrease all not-same selectedPlane family
     data.planes
-      .filter((plane) => !data.selectedPlanesFamily.includes(plane))
+      .filter((plane: Plane) => !data.selectedPlanesFamily.includes(plane))
       .forEach((planeNotFamily: Plane) => {
         this.designEntitiesService.decreaseEntity(
           this.planeEntities.getById(planeNotFamily.id),
@@ -82,7 +73,7 @@ export class MapComponent implements OnDestroy, OnInit {
   }
 
   private clearPlanes(data: PlaneState): void {
-    data.planes
+    data.planes.filter((plane: Plane) => !data.previousSelectedPlanes.includes(plane))
       .forEach(planeNotFamily => {
         this.designEntitiesService.increaseEntity(
           this.planeEntities.getById(planeNotFamily.id),
