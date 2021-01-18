@@ -1,4 +1,4 @@
-import * as Cesium from 'cesium';
+import {Color} from 'cesium';
 
 export interface Position {
   latitude: number;
@@ -12,7 +12,7 @@ export interface Plane {
   position: Position;
   family: PlaneFamily;
   imgURL?: string;
-  color?: Cesium.Color;
+  color?: Color;
   distanceFromSelectedPlane?: number;
 }
 

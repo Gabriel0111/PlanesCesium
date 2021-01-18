@@ -1,9 +1,10 @@
 import {
   ADD_PLANES,
-  AddPlanes,
-  PlanesActions,
   SELECTED_PLANE,
-  SelectedPlane, UNSELECTED_PLANE,
+  UNSELECTED_PLANE,
+  AddPlanes,
+  SelectedPlane,
+  PlanesActions,
 } from './planes.actions';
 import {Plane} from '../modules/core/plane.model';
 import * as haversineDistance from 'haversine-distance';

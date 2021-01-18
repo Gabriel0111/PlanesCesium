@@ -3,9 +3,8 @@ import {RouterModule, Routes} from '@angular/router';
 import {PlanesComponent} from './modules/planes/components/planes.component';
 import {MapComponent} from './modules/map/components/map.component';
 
-
 const routes: Routes = [
-  {path: '', component: MapComponent, data: {noReuse: true}},
+  {path: '', component: MapComponent},
   {path: 'planes', component: PlanesComponent}
 ];
 

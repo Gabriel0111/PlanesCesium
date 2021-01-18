@@ -1,13 +1,23 @@
 import {Injectable} from '@angular/core';
-import {ConstantProperty, Entity, EntityCollection} from 'cesium';
-import * as Cesium from 'cesium';
-import {FAR, FAR_VALUE, ID_SELECTED_SHADOW, NEAR, NEAR_VALUE} from './constants';
+import {Cartesian2, Cartesian3, ConstantProperty, Entity, EntityCollection, LabelStyle, NearFarScalar, VerticalOrigin} from 'cesium';
+import {
+  FAR,
+  FAR_VALUE,
+  FONT_LABEL,
+  ID_SELECTED_SHADOW,
+  LABEL_OFFSET_X,
+  LABEL_OFFSET_Y,
+  NEAR,
+  NEAR_VALUE,
+  SCALE_BILLBOARD
+} from './constants';
 import {Plane} from './plane.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GenerateEntityService {
+
   generateEntitiesFromPlanes(planes: Plane[]): EntityCollection {
     const entities: EntityCollection = new EntityCollection();
 
@@ -15,20 +25,20 @@ export class GenerateEntityService {
       const planeEntity: Entity = new Entity({
         id: plane.id,
         name: plane.name,
-        position: Cesium.Cartesian3.fromDegrees(plane.position.latitude, plane.position.longitude, plane.position.altitude),
+        position: Cartesian3.fromDegrees(plane.position.latitude, plane.position.longitude, plane.position.altitude),
         billboard: {
           image: plane.imgURL,
-          scale: 0.07,
+          scale: SCALE_BILLBOARD,
           color: plane.color,
-          scaleByDistance: new Cesium.NearFarScalar(NEAR, NEAR_VALUE, FAR, FAR_VALUE),
+          scaleByDistance: new NearFarScalar(NEAR, NEAR_VALUE, FAR, FAR_VALUE),
         },
         label: {
           text: plane.name,
-          font: '8pt Arial',
-          style: Cesium.LabelStyle.FILL_AND_OUTLINE,
+          font: FONT_LABEL,
+          style: LabelStyle.FILL_AND_OUTLINE,
           outlineWidth: 2,
-          verticalOrigin: Cesium.VerticalOrigin.BOTTOM,
-          pixelOffset: new Cesium.Cartesian2(0, 40)
+          verticalOrigin: VerticalOrigin.BOTTOM,
+          pixelOffset: new Cartesian2(LABEL_OFFSET_X, LABEL_OFFSET_Y)
         },
       });
       entities.add(planeEntity);
@@ -39,7 +49,7 @@ export class GenerateEntityService {
   generateShadow(plane: Plane): Entity {
     return new Entity({
       id: ID_SELECTED_SHADOW,
-      position: Cesium.Cartesian3.fromDegrees(plane.position.latitude, plane.position.longitude, plane.position.altitude),
+      position: Cartesian3.fromDegrees(plane.position.latitude, plane.position.longitude, plane.position.altitude),
       ellipse: {
         semiMinorAxis: 100000,
         semiMajorAxis: 100000,
@@ -59,18 +69,4 @@ export class GenerateEntityService {
     description += '</ul>';
     return new ConstantProperty(description);
   }
-
-  generateLine(fromPlane: Plane, toPlane: Plane): Entity {
-    const fromPosition: number[] = [fromPlane.position.latitude, fromPlane.position.longitude];
-    const toPosition: number[] = [toPlane.position.latitude, toPlane.position.longitude];
-
-    return new Entity({
-      polyline: {
-        positions: Cesium.Cartesian3.fromDegreesArray([...fromPosition, ...toPosition]),
-        width: 2,
-        material: fromPlane.color.darken(0.4, new Cesium.Color()),
-      }
-    });
-  }
-
 }

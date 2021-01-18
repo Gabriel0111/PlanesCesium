@@ -1,10 +1,9 @@
-import * as Cesium from 'cesium';
 import {Injectable} from '@angular/core';
-import {ConstantProperty, Entity, EntityCollection} from 'cesium';
+import {Color, ConstantProperty, Entity} from 'cesium';
 import {GenerateEntityService} from '../../core/generate-entity.service';
-import {PlanesService} from '../../planes/services/planes.service';
 import {Plane} from '../../core/plane.model';
 import {ID_SELECTED_SHADOW} from '../../core/constants';
+import {HandleEntitiesService} from './handle-entities.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,21 +11,19 @@ import {ID_SELECTED_SHADOW} from '../../core/constants';
 export class DesignEntitiesService {
 
   constructor(private generateEntityService: GenerateEntityService,
-              private planesService: PlanesService) {
-  }
-
-  private linesID: string[] = [];
-
-  decreaseEntity(entity: Entity, plane: Plane): void {
-    entity.billboard.color = new ConstantProperty(
-      new Cesium.Color(plane.color.red, plane.color.green, plane.color.blue, 0.4));
-    entity.label.show = new ConstantProperty(false);
+              private handleEntitiesService: HandleEntitiesService) {
   }
 
   increaseEntity(entity: Entity, plane: Plane): void {
     entity.billboard.color = new ConstantProperty(
-      new Cesium.Color(plane.color.red, plane.color.green, plane.color.blue));
+      new Color(plane.color.red, plane.color.green, plane.color.blue));
     entity.label.show = new ConstantProperty(true);
+  }
+
+  decreaseEntity(entity: Entity, plane: Plane): void {
+    entity.billboard.color = new ConstantProperty(
+      new Color(plane.color.red, plane.color.green, plane.color.blue, 0.4));
+    entity.label.show = new ConstantProperty(false);
   }
 
   addDescription(entity: Entity, planes: Plane[]): void {
@@ -35,27 +32,10 @@ export class DesignEntitiesService {
 
   addShadow(entity: Plane): void {
     const shadowEntity: Entity = this.generateEntityService.generateShadow(entity);
-    this.planesService.drawEntities(shadowEntity);
+    this.handleEntitiesService.drawEntity(shadowEntity);
   }
 
   removeShadow(): void {
-    this.planesService.removeEntities(ID_SELECTED_SHADOW);
-  }
-
-  addLinesPlanesFamily(selectedPlane: Plane, planesFamily: Plane[]): void {
-    const listLines: EntityCollection = new EntityCollection();
-
-    planesFamily.forEach(plane => {
-        const line = this.generateEntityService.generateLine(selectedPlane, plane);
-        this.linesID.push(line.id);
-        listLines.add(line);
-      }
-    );
-
-    this.planesService.drawEntities(listLines);
-  }
-
-  removeLinesPlanesFamily(): void {
-    this.planesService.removeEntities(this.linesID);
+    this.handleEntitiesService.removeEntity(ID_SELECTED_SHADOW);
   }
 }

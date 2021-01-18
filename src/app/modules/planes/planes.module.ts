@@ -5,9 +5,7 @@ import {PlanesService} from './services/planes.service';
 
 @NgModule({
   declarations: [PlanesComponent],
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   exports: [PlanesComponent],
   providers: [PlanesService]
 })
