@@ -45,11 +45,11 @@ export class MapService {
       destination: Cartesian3.fromDegrees(DEST_LNG, DEST_LAT, DEST_ALT)
     });
 
-    this.initSubscription();
+    this.initSubscriptions();
     this.cesiumViewerInit$.next();
   }
 
-  private initSubscription(): void {
+  private initSubscriptions(): void {
     this.viewer.scene.postRender.addEventListener(() => this.postRenderSubject$.next());
 
     this.viewer.selectedEntityChanged.addEventListener((plane: Entity) => {

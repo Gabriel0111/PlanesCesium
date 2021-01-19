@@ -16,3 +16,7 @@ export const LABEL_OFFSET_Y: number = 40;
 export const DEST_LNG: number = 35.238892;
 export const DEST_LAT: number = 31.770552;
 export const DEST_ALT: number = 4000000;
+
+export const LAND_FORCE_COLOR: string = '#7ACA04';
+export const AIR_FORCE_COLOR: string = '#3EFCD6';
+export const CIVILIAN_COLOR: string = '#4464C8';

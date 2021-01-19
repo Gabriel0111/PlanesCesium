@@ -35,8 +35,6 @@ export class HandlePlanesEntitiesService {
   }
 
   clearPlanes(data: PlaneState): void {
-    console.log(data);
-
     data.planes.filter((plane: Plane) => !data.previousSelectedPlanes.includes(plane))
       .forEach((planeNotFamily: Plane) => {
         this.designEntitiesService.increaseEntity(

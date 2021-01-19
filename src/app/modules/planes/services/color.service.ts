@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Plane, PlaneFamily} from '../../core/plane.model';
-import {AIR_FORCE_COLOR, CIVILIAN_COLOR, LAND_FORCE_COLOR} from '../../map/services/colors.constants';
 import {Color} from 'cesium';
+import {AIR_FORCE_COLOR, CIVILIAN_COLOR, LAND_FORCE_COLOR} from '../../core/constants';
 
 @Injectable({
   providedIn: 'root'

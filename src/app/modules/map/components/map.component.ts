@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {map, skipWhile, take} from 'rxjs/operators';
+import {map, take, skipWhile} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../store/appState';
 import {GenerateEntitiesService} from '../services/generate-entities.service';
