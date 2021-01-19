@@ -14,11 +14,10 @@ export class PlanesService {
               private colorService: ColorService) {
   }
 
-  async initPlanes(): Promise<void> {
-    await this.http.get<Plane[]>(URL_PLANES_DATA)
+  initPlanes(): void {
+    this.http.get<Plane[]>(URL_PLANES_DATA)
       .pipe(skipWhile((data: Plane[]) => data.length < 1), take(1))
       .subscribe((planes: Plane[]) => {
-        console.log('in initPlanes');
         this.fillProperties(planes);
         this.store.dispatch(new AddPlanes(planes));
       });
@@ -27,8 +26,7 @@ export class PlanesService {
   private fillProperties(planes: Plane[]): void {
     planes.forEach(plane => {
       plane.imgURL = '/assets/' + plane.family.toString().toLowerCase() + '.png';
-      this.colorService.colorPlane(plane);
-      console.log('in coloring');
+      plane.color = this.colorService.colorPlane(plane);
     });
   }
 }

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {map, skipWhile, take} from 'rxjs/operators';
 import {Store} from '@ngrx/store';
 import {AppState} from '../../../store/appState';
-import {GenerateEntityService} from '../../core/generate-entity.service';
+import {GenerateEntitiesService} from '../services/generate-entities.service';
 import {PlaneState} from '../../../store/planes.reducers';
 import {EntityCollection} from 'cesium';
 import {MapService} from '../services/map.service';
@@ -17,7 +17,7 @@ import {HandlePlanesEntitiesService} from '../../planes/services/handle-planes-e
 export class MapComponent implements OnInit {
 
   constructor(private store: Store<AppState>,
-              private generateEntityService: GenerateEntityService,
+              private generateEntityService: GenerateEntitiesService,
               private mapService: MapService,
               private handleEntitiesService: HandleEntitiesService,
               private handlePlanesEntities: HandlePlanesEntitiesService) {
@@ -34,7 +34,7 @@ export class MapComponent implements OnInit {
 
   private initEntities(): void {
     this.store.select('planes').pipe(
-      skipWhile(data => data.planes.length < 1),
+      skipWhile((data: PlaneState) => data.planes.length < 1),
       take(1),
       map(data => data.planes))
       .subscribe(planes => {

@@ -10,13 +10,13 @@ import {
   NEAR,
   NEAR_VALUE,
   SCALE_BILLBOARD
-} from './constants';
-import {Plane} from './plane.model';
+} from '../../core/constants';
+import {Plane} from '../../core/plane.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class GenerateEntityService {
+export class GenerateEntitiesService {
 
   generateEntitiesFromPlanes(planes: Plane[]): EntityCollection {
     const entities: EntityCollection = new EntityCollection();

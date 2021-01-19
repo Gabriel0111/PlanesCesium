@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Color, ConstantProperty, Entity} from 'cesium';
-import {GenerateEntityService} from '../../core/generate-entity.service';
+import {GenerateEntitiesService} from './generate-entities.service';
 import {Plane} from '../../core/plane.model';
 import {ID_SELECTED_SHADOW} from '../../core/constants';
 import {HandleEntitiesService} from './handle-entities.service';
@@ -10,7 +10,7 @@ import {HandleEntitiesService} from './handle-entities.service';
 })
 export class DesignEntitiesService {
 
-  constructor(private generateEntityService: GenerateEntityService,
+  constructor(private generateEntityService: GenerateEntitiesService,
               private handleEntitiesService: HandleEntitiesService) {
   }
 
